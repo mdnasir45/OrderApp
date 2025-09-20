@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Management</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h2 { margin-top: 30px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f0f0f0; }
+    .hidden { display: none; }
+    button { padding: 6px 12px; margin: 2px; }
+  </style>
+</head>
+<body>
+  <h1>Simple Order Management</h1>
+
+  <!-- LOGIN FORM -->
+  <div id="loginDiv">
+    <h2>Login</h2>
+    <input id="username" placeholder="Username"><br><br>
+    <input id="password" type="password" placeholder="Password"><br><br>
+    <button onclick="login()">Login</button>
+    <p id="loginMsg"></p>
+  </div>
+
+  <!-- MAIN PAGE -->
+  <div id="mainDiv" class="hidden">
+    <h2>Welcome, <span id="userRole"></span></h2>
+    <button onclick="logout()">Logout</button>
+
+    <h3>Add New Item</h3>
+    <input id="newItem" placeholder="Item name">
+    <button onclick="addItem()">Add</button>
+
+    <h2>Pending Items</h2>
+    <table id="pendingTable"></table>
+
+    <h2>Approved Items</h2>
+    <table id="approvedTable"></table>
+
+    <h2>Received Items</h2>
+    <table id="receivedTable"></table>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwgndn7WND-VbmAGwoDHbn0RyeLEdaFQbTCBnKD-7spMIEpDMRSBYWhab79cRcYdClz8A/exec"; // replace with your Apps Script Web App URL
+    let currentUser = null;
+
+    async function postData(action, extra={}) {
+      const body = { action, ...extra };
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: { "Content-Type": "application/json" }
+      });
+      return res.json();
+    }
+
+    async function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const res = await postData("login", { username, password });
+      if (res.success) {
+        currentUser = { username, role: res.role };
+        document.getElementById("loginDiv").classList.add("hidden");
+        document.getElementById("mainDiv").classList.remove("hidden");
+        document.getElementById("userRole").innerText = res.role + " (" + username + ")";
+        loadItems();
+      } else {
+        document.getElementById("loginMsg").innerText = res.message;
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById("loginDiv").classList.remove("hidden");
+      document.getElementById("mainDiv").classList.add("hidden");
+    }
+
+    async function loadItems() {
+      const res = await postData("getAll");
+      if (res.success) {
+        renderTables(res.items);
+      }
+    }
+
+    function renderTables(items) {
+      const pending = items.filter(i => i.status === "Pending").sort((a,b)=> new Date(b.requestedDate)-new Date(a.requestedDate));
+      const approved = items.filter(i => i.status === "Approved").sort((a,b)=> new Date(b.approvedDate)-new Date(a.approvedDate));
+      const received = items.filter(i => i.status === "Received").sort((a,b)=> new Date(b.receivedDate)-new Date(a.receivedDate));
+
+      document.getElementById("pendingTable").innerHTML = makeTable(pending, true);
+      document.getElementById("approvedTable").innerHTML = makeTable(approved, false);
+      document.getElementById("receivedTable").innerHTML = makeTable(received, false);
+    }
+
+    function makeTable(items, allowApprove) {
+      let html = "<tr><th>Item</th><th>Requested By</th><th>Status</th><th>Actions</th></tr>";
+      for (let i of items) {
+        html += `<tr>
+          <td>${i.itemName}</td>
+          <td>${i.requestedBy}</td>
+          <td>${i.status}</td>
+          <td>`;
+        if (i.status === "Pending" && currentUser.role === "manager") {
+          html += `<button onclick="approveItem('${i.id}')">Approve</button>`;
+        }
+        if (i.status === "Pending" || i.status === "Approved") {
+          html += `<button onclick="receiveItem('${i.id}')">Mark Received</button>`;
+        }
+        html += `</td></tr>`;
+      }
+      return html;
+    }
+
+    async function addItem() {
+      const itemName = document.getElementById("newItem").value;
+      if (!itemName) return;
+      await postData("add", { itemName, requestedBy: currentUser.username });
+      document.getElementById("newItem").value = "";
+      loadItems();
+    }
+
+    async function approveItem(id) {
+      await postData("approve", { id, approvedBy: currentUser.username });
+      loadItems();
+    }
+
+    async function receiveItem(id) {
+      await postData("receive", { id, receivedBy: currentUser.username });
+      loadItems();
+    }
+  </script>
+</body>
+</html>
