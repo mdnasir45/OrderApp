@@ -449,7 +449,7 @@
       }
       
       .table {
-        min-width: 600px;
+        min-width: 650px;
         font-size: 0.875rem;
       }
       
@@ -502,7 +502,7 @@
       }
       
       .table {
-        min-width: 500px;
+        min-width: 550px;
         font-size: 0.8125rem;
       }
       
@@ -553,8 +553,8 @@
         <div class="logo" style="justify-content: center; margin-bottom: 1rem;">
           <span style="font-size: 2rem;">📦</span>
         </div>
-        <h1 class="card-title">Welcome Back</h1>
-        <p style="color: var(--text-secondary);">Sign in to your account</p>
+        <h1 class="card-title">Welcome to OrderFlow</h1>
+        <p style="color: var(--text-secondary);">Manage orders efficiently</p>
       </div>
       <div class="card-body">
         <div class="form-group">
@@ -582,7 +582,7 @@
         <div class="card">
           <div class="card-header">
             <h2 class="card-title">Add New Order</h2>
-            <p style="color: var(--text-secondary);">Request a new item for approval</p>
+            <p style="color: var(--text-secondary);">Please request a new item for approval</p>
           </div>
           <div class="card-body">
             <div style="display: flex; gap: 1rem; align-items: end;">
@@ -759,7 +759,7 @@
 
     function makeTable(items, tableType) {
       const isReceivedTable = tableType === "received";
-      const colSpan = isReceivedTable ? "4" : "5"; // 4 columns for received, 5 for others
+      const colSpan = isReceivedTable ? "5" : "5"; // 5 columns for received, 5 for others
       
       if (items.length === 0) {
         return `<tbody><tr><td colspan="${colSpan}" class="empty-state">
@@ -774,8 +774,11 @@
         <th>📊 Status</th>
         <th>📅 Date</th>`;
       
-      // Only add Actions column for non-received tables
-      if (!isReceivedTable) {
+      if (isReceivedTable) {
+        // For received items: add "Received by" column instead of Actions
+        html += `<th>✅ Received By</th>`;
+      } else {
+        // For pending/approved items: add Actions column
         html += `<th>⚡ Actions</th>`;
       }
       
@@ -809,8 +812,11 @@
             <div style="font-weight: 500;">${formattedDate}</div>
           </td>`;
 
-        // Only add actions column for non-received tables
-        if (!isReceivedTable) {
+        if (isReceivedTable) {
+          // For received items: show who received it
+          html += `<td><strong>${escapeHtml(item.receivedBy || 'N/A')}</strong></td>`;
+        } else {
+          // For pending/approved items: show action buttons
           html += `<td><div class="actions">`;
 
           if (item.status === "Pending" && currentUser.role === "manager") {
