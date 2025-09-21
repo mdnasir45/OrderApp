@@ -1,69 +1,841 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Order Management</title>
-<style>
-body{font-family:Arial,sans-serif;margin:20px;} 
-.hidden{display:none;}
-button{padding:6px 12px;margin:2px;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Management Pro</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --primary-solid: #667eea;
+      --primary-dark: #5a6fd8;
+      --secondary: #f8fafc;
+      --accent: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --border: rgba(226, 232, 240, 0.8);
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .navbar-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(102, 126, 234, 0.1);
+      border: 1px solid rgba(102, 126, 234, 0.2);
+      border-radius: 50px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--primary-solid);
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .login-container {
+      max-width: 400px;
+      margin: 4rem auto;
+      padding: 2rem;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-header {
+      padding: 2rem 2rem 1rem;
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      background: var(--primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .card-body {
+      padding: 0 2rem 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-solid);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 1.5rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover:before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--text-primary);
+      border: 2px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: white;
+      border-color: var(--primary-solid);
+      color: var(--primary-solid);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+
+    .section {
+      margin-bottom: 3rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-pending {
+      background: rgba(251, 191, 36, 0.1);
+      color: #d97706;
+      border: 1px solid rgba(251, 191, 36, 0.2);
+    }
+
+    .status-approved {
+      background: rgba(34, 197, 94, 0.1);
+      color: #16a34a;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .status-received {
+      background: rgba(99, 102, 241, 0.1);
+      color: #6366f1;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .table-container {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .table-container.scrollable {
+      max-height: 400px;
+      overflow-y: auto;
+      overflow-x: auto;
+    }
+
+    .table-container.scrollable::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    .table-container.scrollable::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+
+    .table-container.scrollable::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 4px;
+    }
+
+    .table-container.scrollable::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      padding: 1rem 1.5rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .table td {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .table tbody tr {
+      transition: background-color 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+      background: rgba(102, 126, 234, 0.05);
+    }
+
+    .table tfoot {
+      background: rgba(248, 250, 252, 0.8);
+      border-top: 2px solid var(--border);
+    }
+
+    .table tfoot td {
+      border-bottom: none;
+      background: transparent;
+    }
+
+    .pagination-info {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--text-secondary);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .error-message {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #dc2626;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .navbar-content {
+        padding: 0 1rem;
+      }
+      
+      .main-container {
+        padding: 0 1rem;
+        margin: 1rem auto;
+      }
+      
+      .card-header, .card-body {
+        padding: 1.5rem 1rem;
+      }
+      
+      .table th, .table td {
+        padding: 0.75rem 1rem;
+      }
+      
+      .actions {
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- Navigation Bar -->
+  <nav class="navbar hidden" id="navbar">
+    <div class="navbar-content">
+      <div class="logo">
+        <span>📦</span>
+        <span>OrderFlow Pro</span>
+      </div>
+      <div class="user-info">
+        <div class="user-badge" id="userBadge">
+          <span>👤</span>
+          <span id="userRole"></span>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="logout()">
+          <span>🚪</span>
+          Logout
+        </button>
+      </div>
+    </div>
+  </nav>
 
-<div id="loginDiv">
-  <h2>Login</h2>
-  <input id="username" placeholder="Username"><br><br>
-  <input id="password" type="password" placeholder="Password"><br><br>
-  <button onclick="login()">Login</button>
-  <p id="loginMsg"></p>
-</div>
+  <!-- Login Page -->
+  <div id="loginDiv" class="login-container fade-in">
+    <div class="card">
+      <div class="card-header">
+        <div class="logo" style="justify-content: center; margin-bottom: 1rem;">
+          <span style="font-size: 2rem;">📦</span>
+        </div>
+        <h1 class="card-title">Welcome to OrderFlow</h1>
+        <p style="color: var(--text-secondary);">Manage orders efficiently</p>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input class="form-input" id="username" type="text" placeholder="Enter your username">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-input" id="password" type="password" placeholder="Enter your password">
+        </div>
+        <button class="btn btn-primary" style="width: 100%;" onclick="login()">
+          <span>🔐</span>
+          Sign In
+        </button>
+        <div id="loginMsg" class="error-message hidden"></div>
+      </div>
+    </div>
+  </div>
 
-<div id="mainDiv" class="hidden">
-  <h2>Welcome, <span id="userRole"></span></h2>
-  <button onclick="logout()">Logout</button>
-</div>
+  <!-- Main Application -->
+  <div id="mainDiv" class="hidden">
+    <div class="main-container">
+      <!-- Add New Item Section -->
+      <div class="section">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Add New Order</h2>
+            <p style="color: var(--text-secondary);">Request a new item for approval</p>
+          </div>
+          <div class="card-body">
+            <div style="display: flex; gap: 1rem; align-items: end;">
+              <div style="flex: 1;">
+                <label class="form-label" for="newItem">Item Name</label>
+                <input class="form-input" id="newItem" type="text" placeholder="Enter item name">
+              </div>
+              <button class="btn btn-primary" onclick="addItem()">
+                <span>➕</span>
+                Add Item
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-<script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyKDySo9JqDu1Ia5V9T21IckfsyntoVr7QHTflMBSRc-pMy8921P4eUG6XWQ0m5Cou1/exec";
-let currentUser = null;
+      <!-- Pending Items -->
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">⏳ Pending Approval</h2>
+          <span class="status-badge status-pending" id="pendingCount">0 items</span>
+        </div>
+        <div class="table-container">
+          <table class="table" id="pendingTable"></table>
+        </div>
+      </div>
 
-async function postData(action, extra={}) {
-  const body = { action, ...extra };
-  const res = await fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify(body),
-    headers: { "Content-Type": "application/json" }
-  });
-  return res.json();
-}
+      <!-- Approved Items -->
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">✅ Approved Orders</h2>
+          <span class="status-badge status-approved" id="approvedCount">0 items</span>
+        </div>
+        <div class="table-container">
+          <table class="table" id="approvedTable"></table>
+        </div>
+      </div>
 
-async function login() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  try {
-    const res = await postData("login", { username, password });
-    console.log(res);
-    if (res.success) {
-      currentUser = { username, role: res.role };
-      document.getElementById("loginDiv").classList.add("hidden");
-      document.getElementById("mainDiv").classList.remove("hidden");
-      document.getElementById("userRole").innerText = res.role + " (" + username + ")";
-    } else {
-      document.getElementById("loginMsg").innerText = res.message;
+      <!-- Received Items -->
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">📦 Received Items</h2>
+          <span class="status-badge status-received" id="receivedCount">0 items</span>
+        </div>
+        <div class="table-container scrollable">
+          <table class="table" id="receivedTable"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize global variables
+    const API_URL = "https://script.google.com/macros/s/AKfycbyKDySo9JqDu1Ia5V9T21IckfsyntoVr7QHTflMBSRc-pMy8921P4eUG6XWQ0m5Cou1/exec";
+    let currentUser = null;
+    window.showAllReceived = false;
+
+    async function postData(action, extra={}) {
+      const body = { action, ...extra };
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: { "Content-Type": "text/plain" }
+      });
+      return res.json();
     }
-  } catch (err) {
-    console.error("Fetch error:", err);
-    document.getElementById("loginMsg").innerText = "Error connecting to server";
-  }
-}
 
-function logout() {
-  currentUser = null;
-  document.getElementById("loginDiv").classList.remove("hidden");
-  document.getElementById("mainDiv").classList.add("hidden");
-}
-</script>
+    async function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      const loginMsg = document.getElementById("loginMsg");
 
+      if (!username || !password) {
+        showError("Please enter both username and password");
+        return;
+      }
+
+      // Show loading state
+      const loginBtn = document.querySelector("#loginDiv .btn-primary");
+      const originalText = loginBtn.innerHTML;
+      loginBtn.innerHTML = '<span>⏳</span> Signing In...';
+      loginBtn.disabled = true;
+
+      try {
+        const res = await postData("login", { username, password });
+        if (res.success) {
+          currentUser = { username, role: res.role };
+          
+          // Hide login, show main app
+          document.getElementById("loginDiv").classList.add("hidden");
+          document.getElementById("navbar").classList.remove("hidden");
+          document.getElementById("mainDiv").classList.remove("hidden");
+          
+          // Update user info
+          document.getElementById("userRole").textContent = `${res.role} (${username})`;
+          
+          // Load data
+          await loadItems();
+          
+          // Hide error message
+          loginMsg.classList.add("hidden");
+        } else {
+          showError(res.message || "Login failed");
+        }
+      } catch (err) {
+        showError("Unable to connect to server. Please try again.");
+        console.error("Login error:", err);
+      } finally {
+        // Reset button
+        loginBtn.innerHTML = originalText;
+        loginBtn.disabled = false;
+      }
+    }
+
+    function showError(message) {
+      const loginMsg = document.getElementById("loginMsg");
+      loginMsg.textContent = message;
+      loginMsg.classList.remove("hidden");
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById("loginDiv").classList.remove("hidden");
+      document.getElementById("navbar").classList.add("hidden");
+      document.getElementById("mainDiv").classList.add("hidden");
+      
+      // Clear form
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
+      document.getElementById("loginMsg").classList.add("hidden");
+    }
+
+    async function loadItems() {
+      try {
+        const res = await postData("getAll");
+        if (res.success) {
+          renderTables(res.items);
+        }
+      } catch (err) {
+        console.error("Error loading items:", err);
+      }
+    }
+
+    function renderTables(items) {
+      // Sort by most recent date for each status
+      const pending = items.filter(i => i.status === "Pending").sort((a,b) => {
+        const dateA = new Date(a.requestedDate || 0);
+        const dateB = new Date(b.requestedDate || 0);
+        return dateB - dateA; // Most recent first
+      });
+      
+      const approved = items.filter(i => i.status === "Approved").sort((a,b) => {
+        const dateA = new Date(a.approvedDate || 0);
+        const dateB = new Date(b.approvedDate || 0);
+        return dateB - dateA; // Most recent first
+      });
+      
+      const received = items.filter(i => i.status === "Received").sort((a,b) => {
+        const dateA = new Date(a.receivedDate || 0);
+        const dateB = new Date(b.receivedDate || 0);
+        return dateB - dateA; // Most recent first
+      });
+
+      // Update counts
+      document.getElementById("pendingCount").textContent = `${pending.length} items`;
+      document.getElementById("approvedCount").textContent = `${approved.length} items`;
+      document.getElementById("receivedCount").textContent = `${received.length} items`;
+
+      // Render tables
+      document.getElementById("pendingTable").innerHTML = makeTable(pending, "pending");
+      document.getElementById("approvedTable").innerHTML = makeTable(approved, "approved");
+      document.getElementById("receivedTable").innerHTML = makeTable(received, "received");
+    }
+
+    function makeTable(items, tableType) {
+      const isReceivedTable = tableType === "received";
+      const colSpan = isReceivedTable ? "4" : "5"; // 4 columns for received, 5 for others
+      
+      if (items.length === 0) {
+        return `<tbody><tr><td colspan="${colSpan}" class="empty-state">
+          <div class="empty-state-icon">📭</div>
+          <div>No ${tableType} items found</div>
+        </td></tr></tbody>`;
+      }
+
+      let html = `<thead><tr>
+        <th>📝 Item</th>
+        <th>👤 Requested By</th>
+        <th>📊 Status</th>
+        <th>📅 Date</th>`;
+      
+      // Only add Actions column for non-received tables
+      if (!isReceivedTable) {
+        html += `<th>⚡ Actions</th>`;
+      }
+      
+      html += `</tr></thead><tbody>`;
+
+      for (let item of items) {
+        const statusClass = `status-${item.status.toLowerCase()}`;
+        
+        // Format date based on status
+        let dateString = '';
+        let dateValue = '';
+        if (item.status === 'Pending' && item.requestedDate) {
+          dateString = 'Requested';
+          dateValue = item.requestedDate;
+        } else if (item.status === 'Approved' && item.approvedDate) {
+          dateString = 'Approved';
+          dateValue = item.approvedDate;
+        } else if (item.status === 'Received' && item.receivedDate) {
+          dateString = 'Received';
+          dateValue = item.receivedDate;
+        }
+        
+        const formattedDate = dateValue ? formatDate(dateValue) : 'N/A';
+        
+        html += `<tr>
+          <td><strong>${escapeHtml(item.itemName)}</strong></td>
+          <td>${escapeHtml(item.requestedBy)}</td>
+          <td><span class="status-badge ${statusClass}">${item.status}</span></td>
+          <td>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">${dateString}</div>
+            <div style="font-weight: 500;">${formattedDate}</div>
+          </td>`;
+
+        // Only add actions column for non-received tables
+        if (!isReceivedTable) {
+          html += `<td><div class="actions">`;
+
+          if (item.status === "Pending" && currentUser.role === "manager") {
+            html += `<button class="btn btn-success btn-sm" onclick="approveItem('${item.id}')">
+              <span>✅</span> Approve
+            </button>`;
+          }
+          
+          if (item.status === "Pending" || item.status === "Approved") {
+            html += `<button class="btn btn-secondary btn-sm" onclick="receiveItem('${item.id}')">
+              <span>📦</span> Mark Received
+            </button>`;
+          }
+
+          html += `</div></td>`;
+        }
+        
+        html += `</tr>`;
+      }
+      
+      html += "</tbody>";
+      
+      return html;
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return 'N/A';
+      
+      try {
+        const date = new Date(dateString);
+        
+        // Format as: Sep 21, 2025
+        return date.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        });
+      } catch (e) {
+        return dateString;
+      }
+    }
+
+    function toggleShowAllReceived() {
+      // This function is no longer needed since we're using scrolling
+      // but keeping it to avoid errors
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    async function addItem() {
+      const itemName = document.getElementById("newItem").value.trim();
+      if (!itemName) {
+        document.getElementById("newItem").focus();
+        return;
+      }
+
+      // Show loading state
+      const addBtn = document.querySelector("#mainDiv .btn-primary");
+      const originalText = addBtn.innerHTML;
+      addBtn.innerHTML = '<span>⏳</span> Adding...';
+      addBtn.disabled = true;
+
+      try {
+        await postData("add", { itemName, requestedBy: currentUser.username });
+        document.getElementById("newItem").value = "";
+        await loadItems();
+        
+        // Show success animation
+        addBtn.innerHTML = '<span>✅</span> Added!';
+        setTimeout(() => {
+          addBtn.innerHTML = originalText;
+        }, 1000);
+      } catch (err) {
+        console.error("Error adding item:", err);
+        addBtn.innerHTML = '<span>❌</span> Error';
+        setTimeout(() => {
+          addBtn.innerHTML = originalText;
+        }, 2000);
+      } finally {
+        addBtn.disabled = false;
+      }
+    }
+
+    async function approveItem(id) {
+      try {
+        await postData("approve", { id, approvedBy: currentUser.username });
+        await loadItems();
+      } catch (err) {
+        console.error("Error approving item:", err);
+      }
+    }
+
+    async function receiveItem(id) {
+      try {
+        await postData("receive", { id, receivedBy: currentUser.username });
+        await loadItems();
+      } catch (err) {
+        console.error("Error receiving item:", err);
+      }
+    }
+
+    // Enter key support for login
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        if (!document.getElementById("loginDiv").classList.contains("hidden")) {
+          login();
+        } else if (document.activeElement === document.getElementById("newItem")) {
+          addItem();
+        }
+      }
+    });
+  </script>
 </body>
 </html>
