@@ -36,7 +36,7 @@
       color: var(--text-primary);
       min-height: 100vh;
       line-height: 1.6;
-      overflow-x: hidden; /* Prevent horizontal scroll */
+      overflow-x: hidden;
     }
 
     .navbar {
@@ -147,7 +147,7 @@
       color: var(--text-primary);
     }
 
-    .form-input {
+    .form-input, .form-select {
       width: 100%;
       padding: 0.875rem 1rem;
       border: 2px solid var(--border);
@@ -157,7 +157,7 @@
       background: rgba(255, 255, 255, 0.8);
     }
 
-    .form-input:focus {
+    .form-input:focus, .form-select:focus {
       outline: none;
       border-color: var(--primary-solid);
       box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
@@ -268,6 +268,12 @@
       border: 1px solid rgba(251, 191, 36, 0.2);
     }
 
+    .status-verified {
+      background: rgba(59, 130, 246, 0.1);
+      color: #2563eb;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
     .status-approved {
       background: rgba(34, 197, 94, 0.1);
       color: #16a34a;
@@ -287,31 +293,6 @@
       border-radius: 16px;
       overflow: hidden;
       box-shadow: var(--shadow-md);
-    }
-
-    .table-container.scrollable {
-      max-height: 400px;
-      overflow-y: auto;
-      overflow-x: auto;
-    }
-
-    .table-container.scrollable::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-
-    .table-container.scrollable::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.1);
-      border-radius: 4px;
-    }
-
-    .table-container.scrollable::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border-radius: 4px;
-    }
-
-    .table-container.scrollable::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(135deg, #5a6fd8, #6a4190);
     }
 
     .table {
@@ -343,22 +324,6 @@
 
     .table tbody tr:hover {
       background: rgba(102, 126, 234, 0.05);
-    }
-
-    .table tfoot {
-      background: rgba(248, 250, 252, 0.8);
-      border-top: 2px solid var(--border);
-    }
-
-    .table tfoot td {
-      border-bottom: none;
-      background: transparent;
-    }
-
-    .pagination-info {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      margin-bottom: 0.75rem;
     }
 
     .empty-state {
@@ -393,6 +358,16 @@
       font-size: 0.875rem;
     }
 
+    .success-message {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: #059669;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 0.875rem;
+    }
+
     .fade-in {
       animation: fadeIn 0.5s ease-in;
     }
@@ -402,16 +377,83 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .pulse {
-      animation: pulse 2s infinite;
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
     }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+    .modal.show {
+      display: flex;
     }
 
-    /* Responsive Design */
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .modal-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      justify-content: flex-end;
+    }
+
+    .user-list {
+      margin-top: 1.5rem;
+    }
+
+    .user-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background: rgba(248, 250, 252, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .user-item-info {
+      flex: 1;
+    }
+
+    .user-item-name {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .user-item-role {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
     @media (max-width: 768px) {
       .navbar-content {
         padding: 0 1rem;
@@ -419,33 +461,13 @@
         gap: 1rem;
       }
       
-      .logo {
-        font-size: 1.25rem;
-      }
-      
       .main-container {
         padding: 0 1rem;
         margin: 1rem auto;
       }
       
-      .login-container {
-        margin: 2rem auto;
-        padding: 0 1rem;
-      }
-      
-      .card-header, .card-body {
-        padding: 1.5rem 1rem;
-      }
-      
-      .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-      }
-      
       .table-container {
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
       }
       
       .table {
@@ -453,74 +475,8 @@
         font-size: 0.875rem;
       }
       
-      .table th, .table td {
-        padding: 0.5rem 0.75rem;
-        white-space: nowrap;
-      }
-      
-      .table th {
-        font-size: 0.75rem;
-      }
-      
-      .actions {
-        justify-content: center;
-        flex-wrap: nowrap;
-        gap: 0.25rem;
-      }
-      
-      .btn-sm {
-        padding: 0.375rem 0.75rem;
-        font-size: 0.6875rem;
-      }
-      
-      .status-badge {
-        font-size: 0.65rem;
-        padding: 0.25rem 0.5rem;
-      }
-      
-      .user-badge {
-        font-size: 0.75rem;
-        padding: 0.375rem 0.75rem;
-      }
-      
       .form-input {
-        font-size: 16px; /* Prevents zoom on iOS */
-      }
-    }
-
-    @media (max-width: 480px) {
-      .logo span:first-child {
-        font-size: 1.5rem;
-      }
-      
-      .card-title {
-        font-size: 1.25rem;
-      }
-      
-      .section-title {
-        font-size: 1.125rem;
-      }
-      
-      .table {
-        min-width: 550px;
-        font-size: 0.8125rem;
-      }
-      
-      .table th, .table td {
-        padding: 0.375rem 0.5rem;
-      }
-      
-      .btn-sm {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.625rem;
-      }
-      
-      .main-container {
-        padding: 0 0.5rem;
-      }
-      
-      .navbar-content {
-        padding: 0 0.5rem;
+        font-size: 16px;
       }
     }
   </style>
@@ -534,6 +490,10 @@
         <span>OrderFlow Pro</span>
       </div>
       <div class="user-info">
+        <button class="btn btn-secondary btn-sm hidden" id="manageUsersBtn" onclick="openUserManagement()">
+          <span>👥</span>
+          Manage Users
+        </button>
         <div class="user-badge" id="userBadge">
           <span>👤</span>
           <span id="userRole"></span>
@@ -574,6 +534,47 @@
     </div>
   </div>
 
+  <!-- User Management Modal -->
+  <div id="userModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">👥 User Management</h2>
+      </div>
+      <div>
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">Add New User</h3>
+        <div class="form-group">
+          <label class="form-label" for="newUsername">Username</label>
+          <input class="form-input" id="newUsername" type="text" placeholder="Enter username">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="newPassword">Password</label>
+          <input class="form-input" id="newPassword" type="password" placeholder="Enter password">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="newRole">Role</label>
+          <select class="form-select" id="newRole">
+            <option value="employee">Employee</option>
+            <option value="manager">Manager</option>
+            <option value="finance">Finance</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="width: 100%;" onclick="addUser()">
+          <span>➕</span>
+          Add User
+        </button>
+        <div id="userMsg" class="hidden"></div>
+        
+        <div class="user-list">
+          <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">Existing Users</h3>
+          <div id="userListContainer"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeUserManagement()">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Main Application -->
   <div id="mainDiv" class="hidden">
     <div class="main-container">
@@ -582,7 +583,7 @@
         <div class="card">
           <div class="card-header">
             <h2 class="card-title">Add New Order</h2>
-            <p style="color: var(--text-secondary);">Please request a new item for approval</p>
+            <p style="color: var(--text-secondary);">Request a new item</p>
           </div>
           <div class="card-body">
             <div style="display: flex; gap: 1rem; align-items: end;">
@@ -599,14 +600,25 @@
         </div>
       </div>
 
-      <!-- Pending Items -->
-      <div class="section">
+      <!-- Pending Items (Manager Verification) -->
+      <div class="section" id="pendingSection">
         <div class="section-header">
-          <h2 class="section-title">⏳ Pending Approval</h2>
+          <h2 class="section-title">⏳ Pending Manager Verification</h2>
           <span class="status-badge status-pending" id="pendingCount">0 items</span>
         </div>
         <div class="table-container">
           <table class="table" id="pendingTable"></table>
+        </div>
+      </div>
+
+      <!-- Verified Items (Finance Approval) -->
+      <div class="section" id="verifiedSection">
+        <div class="section-header">
+          <h2 class="section-title">🔍 Pending Finance Approval</h2>
+          <span class="status-badge status-verified" id="verifiedCount">0 items</span>
+        </div>
+        <div class="table-container">
+          <table class="table" id="verifiedTable"></table>
         </div>
       </div>
 
@@ -627,7 +639,7 @@
           <h2 class="section-title">📦 Received Items</h2>
           <span class="status-badge status-received" id="receivedCount">0 items</span>
         </div>
-        <div class="table-container scrollable">
+        <div class="table-container">
           <table class="table" id="receivedTable"></table>
         </div>
       </div>
@@ -635,10 +647,8 @@
   </div>
 
   <script>
-    // Initialize global variables
     const API_URL = "https://script.google.com/macros/s/AKfycbyKDySo9JqDu1Ia5V9T21IckfsyntoVr7QHTflMBSRc-pMy8921P4eUG6XWQ0m5Cou1/exec";
     let currentUser = null;
-    window.showAllReceived = false;
 
     async function postData(action, extra={}) {
       const body = { action, ...extra };
@@ -656,11 +666,10 @@
       const loginMsg = document.getElementById("loginMsg");
 
       if (!username || !password) {
-        showError("Please enter both username and password");
+        showMessage(loginMsg, "Please enter both username and password", "error");
         return;
       }
 
-      // Show loading state
       const loginBtn = document.querySelector("#loginDiv .btn-primary");
       const originalText = loginBtn.innerHTML;
       loginBtn.innerHTML = '<span>⏳</span> Signing In...';
@@ -671,36 +680,34 @@
         if (res.success) {
           currentUser = { username, role: res.role };
           
-          // Hide login, show main app
           document.getElementById("loginDiv").classList.add("hidden");
           document.getElementById("navbar").classList.remove("hidden");
           document.getElementById("mainDiv").classList.remove("hidden");
           
-          // Update user info
           document.getElementById("userRole").textContent = `${res.role} (${username})`;
           
-          // Load data
-          await loadItems();
+          if (res.role === "manager") {
+            document.getElementById("manageUsersBtn").classList.remove("hidden");
+          }
           
-          // Hide error message
+          await loadItems();
           loginMsg.classList.add("hidden");
         } else {
-          showError(res.message || "Login failed");
+          showMessage(loginMsg, res.message || "Login failed", "error");
         }
       } catch (err) {
-        showError("Unable to connect to server. Please try again.");
+        showMessage(loginMsg, "Unable to connect to server. Please try again.", "error");
         console.error("Login error:", err);
       } finally {
-        // Reset button
         loginBtn.innerHTML = originalText;
         loginBtn.disabled = false;
       }
     }
 
-    function showError(message) {
-      const loginMsg = document.getElementById("loginMsg");
-      loginMsg.textContent = message;
-      loginMsg.classList.remove("hidden");
+    function showMessage(element, message, type) {
+      element.textContent = message;
+      element.className = type === "error" ? "error-message" : "success-message";
+      element.classList.remove("hidden");
     }
 
     function logout() {
@@ -708,8 +715,8 @@
       document.getElementById("loginDiv").classList.remove("hidden");
       document.getElementById("navbar").classList.add("hidden");
       document.getElementById("mainDiv").classList.add("hidden");
+      document.getElementById("manageUsersBtn").classList.add("hidden");
       
-      // Clear form
       document.getElementById("username").value = "";
       document.getElementById("password").value = "";
       document.getElementById("loginMsg").classList.add("hidden");
@@ -727,39 +734,25 @@
     }
 
     function renderTables(items) {
-      // Sort by most recent date for each status
-      const pending = items.filter(i => i.status === "Pending").sort((a,b) => {
-        const dateA = new Date(a.requestedDate || 0);
-        const dateB = new Date(b.requestedDate || 0);
-        return dateB - dateA; // Most recent first
-      });
-      
-      const approved = items.filter(i => i.status === "Approved").sort((a,b) => {
-        const dateA = new Date(a.approvedDate || 0);
-        const dateB = new Date(b.approvedDate || 0);
-        return dateB - dateA; // Most recent first
-      });
-      
-      const received = items.filter(i => i.status === "Received").sort((a,b) => {
-        const dateA = new Date(a.receivedDate || 0);
-        const dateB = new Date(b.receivedDate || 0);
-        return dateB - dateA; // Most recent first
-      });
+      const pending = items.filter(i => i.status === "Pending").sort((a,b) => new Date(b.requestedDate || 0) - new Date(a.requestedDate || 0));
+      const verified = items.filter(i => i.status === "Verified").sort((a,b) => new Date(b.verifiedDate || 0) - new Date(a.verifiedDate || 0));
+      const approved = items.filter(i => i.status === "Approved").sort((a,b) => new Date(b.approvedDate || 0) - new Date(a.approvedDate || 0));
+      const received = items.filter(i => i.status === "Received").sort((a,b) => new Date(b.receivedDate || 0) - new Date(a.receivedDate || 0));
 
-      // Update counts
       document.getElementById("pendingCount").textContent = `${pending.length} items`;
+      document.getElementById("verifiedCount").textContent = `${verified.length} items`;
       document.getElementById("approvedCount").textContent = `${approved.length} items`;
       document.getElementById("receivedCount").textContent = `${received.length} items`;
 
-      // Render tables
       document.getElementById("pendingTable").innerHTML = makeTable(pending, "pending");
+      document.getElementById("verifiedTable").innerHTML = makeTable(verified, "verified");
       document.getElementById("approvedTable").innerHTML = makeTable(approved, "approved");
       document.getElementById("receivedTable").innerHTML = makeTable(received, "received");
     }
 
     function makeTable(items, tableType) {
       const isReceivedTable = tableType === "received";
-      const colSpan = isReceivedTable ? "5" : "5"; // 5 columns for received, 5 for others
+      const colSpan = isReceivedTable ? "5" : "5";
       
       if (items.length === 0) {
         return `<tbody><tr><td colspan="${colSpan}" class="empty-state">
@@ -775,10 +768,8 @@
         <th>📅 Date</th>`;
       
       if (isReceivedTable) {
-        // For received items: add "Received by" column instead of Actions
         html += `<th>✅ Received By</th>`;
       } else {
-        // For pending/approved items: add Actions column
         html += `<th>⚡ Actions</th>`;
       }
       
@@ -787,12 +778,14 @@
       for (let item of items) {
         const statusClass = `status-${item.status.toLowerCase()}`;
         
-        // Format date based on status
         let dateString = '';
         let dateValue = '';
         if (item.status === 'Pending' && item.requestedDate) {
           dateString = 'Requested';
           dateValue = item.requestedDate;
+        } else if (item.status === 'Verified' && item.verifiedDate) {
+          dateString = 'Verified';
+          dateValue = item.verifiedDate;
         } else if (item.status === 'Approved' && item.approvedDate) {
           dateString = 'Approved';
           dateValue = item.approvedDate;
@@ -813,19 +806,34 @@
           </td>`;
 
         if (isReceivedTable) {
-          // For received items: show who received it
-          html += `<td><strong>${escapeHtml(item.receivedBy || 'N/A')}</strong></td>`;
+          html += `<td>
+            <div><strong>${escapeHtml(item.receivedBy || 'N/A')}</strong></div>`;
+          
+          if (currentUser.role === "manager") {
+            html += `<div style="margin-top: 0.5rem;">
+              <button class="btn btn-danger btn-sm" onclick="deleteItem('${item.id}')">
+                <span>🗑️</span> Delete
+              </button>
+            </div>`;
+          }
+          
+          html += `</td>`;
         } else {
-          // For pending/approved items: show action buttons
           html += `<td><div class="actions">`;
 
           if (item.status === "Pending" && currentUser.role === "manager") {
+            html += `<button class="btn btn-success btn-sm" onclick="verifyItem('${item.id}')">
+              <span>✓</span> Verify
+            </button>`;
+          }
+          
+          if (item.status === "Verified" && currentUser.role === "finance") {
             html += `<button class="btn btn-success btn-sm" onclick="approveItem('${item.id}')">
               <span>✅</span> Approve
             </button>`;
           }
           
-          if (item.status === "Pending" || item.status === "Approved") {
+          if (item.status === "Approved") {
             html += `<button class="btn btn-secondary btn-sm" onclick="receiveItem('${item.id}')">
               <span>📦</span> Mark Received
             </button>`;
@@ -847,8 +855,6 @@
       
       try {
         const date = new Date(dateString);
-        
-        // Format as: Sep 21, 2025
         return date.toLocaleDateString('en-US', {
           month: 'short',
           day: 'numeric',
@@ -857,11 +863,6 @@
       } catch (e) {
         return dateString;
       }
-    }
-
-    function toggleShowAllReceived() {
-      // This function is no longer needed since we're using scrolling
-      // but keeping it to avoid errors
     }
 
     function escapeHtml(text) {
@@ -877,7 +878,6 @@
         return;
       }
 
-      // Show loading state
       const addBtn = document.querySelector("#mainDiv .btn-primary");
       const originalText = addBtn.innerHTML;
       addBtn.innerHTML = '<span>⏳</span> Adding...';
@@ -888,7 +888,6 @@
         document.getElementById("newItem").value = "";
         await loadItems();
         
-        // Show success animation
         addBtn.innerHTML = '<span>✅</span> Added!';
         setTimeout(() => {
           addBtn.innerHTML = originalText;
@@ -901,6 +900,15 @@
         }, 2000);
       } finally {
         addBtn.disabled = false;
+      }
+    }
+
+    async function verifyItem(id) {
+      try {
+        await postData("verify", { id, verifiedBy: currentUser.username });
+        await loadItems();
+      } catch (err) {
+        console.error("Error verifying item:", err);
       }
     }
 
@@ -922,7 +930,113 @@
       }
     }
 
-    // Enter key support for login
+    async function deleteItem(id) {
+      if (!confirm("Are you sure you want to delete this item? This action cannot be undone.")) {
+        return;
+      }
+
+      try {
+        await postData("delete", { id });
+        await loadItems();
+      } catch (err) {
+        console.error("Error deleting item:", err);
+      }
+    }
+
+    async function openUserManagement() {
+      document.getElementById("userModal").classList.add("show");
+      await loadUsers();
+    }
+
+    function closeUserManagement() {
+      document.getElementById("userModal").classList.remove("show");
+      document.getElementById("newUsername").value = "";
+      document.getElementById("newPassword").value = "";
+      document.getElementById("newRole").value = "employee";
+      document.getElementById("userMsg").classList.add("hidden");
+    }
+
+    async function loadUsers() {
+      try {
+        const res = await postData("getUsers");
+        if (res.success) {
+          renderUserList(res.users);
+        }
+      } catch (err) {
+        console.error("Error loading users:", err);
+      }
+    }
+
+    function renderUserList(users) {
+      const container = document.getElementById("userListContainer");
+      
+      if (users.length === 0) {
+        container.innerHTML = '<div class="empty-state" style="padding: 1rem;">No users found</div>';
+        return;
+      }
+
+      let html = '';
+      for (let user of users) {
+        html += `<div class="user-item">
+          <div class="user-item-info">
+            <div class="user-item-name">${escapeHtml(user.username)}</div>
+            <div class="user-item-role">${escapeHtml(user.role)}</div>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="deleteUser('${escapeHtml(user.username)}')">
+            <span>🗑️</span> Delete
+          </button>
+        </div>`;
+      }
+      
+      container.innerHTML = html;
+    }
+
+    async function addUser() {
+      const username = document.getElementById("newUsername").value.trim();
+      const password = document.getElementById("newPassword").value;
+      const role = document.getElementById("newRole").value;
+      const userMsg = document.getElementById("userMsg");
+
+      if (!username || !password) {
+        showMessage(userMsg, "Please enter username and password", "error");
+        return;
+      }
+
+      try {
+        const res = await postData("addUser", { username, password, role });
+        if (res.success) {
+          showMessage(userMsg, "User added successfully!", "success");
+          document.getElementById("newUsername").value = "";
+          document.getElementById("newPassword").value = "";
+          document.getElementById("newRole").value = "employee";
+          await loadUsers();
+        } else {
+          showMessage(userMsg, res.message || "Failed to add user", "error");
+        }
+      } catch (err) {
+        showMessage(userMsg, "Error adding user", "error");
+        console.error("Error adding user:", err);
+      }
+    }
+
+    async function deleteUser(username) {
+      if (!confirm(`Are you sure you want to delete user "${username}"?`)) {
+        return;
+      }
+
+      try {
+        const res = await postData("deleteUser", { username });
+        if (res.success) {
+          await loadUsers();
+        } else {
+          alert(res.message || "Failed to delete user");
+        }
+      } catch (err) {
+        console.error("Error deleting user:", err);
+        alert("Error deleting user");
+      }
+    }
+
     document.addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
         if (!document.getElementById("loginDiv").classList.contains("hidden")) {
